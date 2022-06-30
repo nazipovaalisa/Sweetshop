@@ -1,0 +1,7 @@
+{% autoescape off %}
+
+Здравствуйте, {{ user.get_username }},
+Чтобы закончить регистрацию, перейдите по ссылке
+http://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}
+
+{% endautoescape %}

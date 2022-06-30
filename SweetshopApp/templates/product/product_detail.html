@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="col-md-12 pt-3">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ product.image.url }}" class="img-fluid">
+        </div>
+        <div class="col-md-8">
+            <h4 style="color: sienna">{{ product.name }}</h4>
+            <hr>
+            <p><strong>Вес: </strong>{{ product.weight }} кг</p>
+        {% if request.user.is_authenticated %}
+                {% if product in cart.products_in_cart %}
+                    <a href="#" class="btn btn-secondary disabled"><i class="bi bi-bag-check-fill" style="font-size: 1rem;"></i> Товар в корзине</a>
+                {% else %}
+                    <a href="{% url 'add_to_cart' product_slug=product.slug %}">
+                        <button class="btn btn-outline-dark">
+                            <i class="bi bi-bag-check" style="font-size: 1rem;"></i>
+                            Добавить в корзину
+                        </button>
+                    </a>
+                {% endif %}
+        {% else %}
+                             <a href="#" class="btn btn-secondary disabled"> <i class="bi bi-bag-check" style="font-size: 1rem;"></i>
+                            Авторизуйтесь или зарегистрируйтесь
+                            </a>
+        {% endif %}
+        <hr>
+        <p><strong>Описание:</strong> {{ product.description }}</p>
+        </div>
+    </div>
+    </div>
+
+{% endblock content %}

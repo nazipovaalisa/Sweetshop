@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class="text-center mt-5 mb-5">Вашa корзина {% if not cart.products.count %}пуста{% endif %}</h3>
+    {% if cart.products.count %}
+        <table class="table text-center">
+        <thead>
+            <tr>
+                <th scope="col">Наименование</th>
+                <th scope="col">Изображение</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Кол-во</th>
+                <th scope="col">Общая цена</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in cart.products.all %}
+            <tr>
+            <th scope="row">{{ item.product.name }}</th>
+                        <td class="w-25"><img src="{{ item.product.image.url }}" class="img-fluid"></td>
+                        <td>{{ item.product.price }} руб.</td>
+                        <td align="center">
+
+                            <form action="{% url 'change_gty' product_slug=item.product.slug %}" method="POST">
+                                {% csrf_token %}
+                                <input type="number" class="form-control" style="width: 50px;" name="qty" min="1" value="{{ item.qty }}">
+                                <br>
+                                <input type="submit" class="btn btn-secondary" value="Изменить кол-во">
+                            </form>
+
+                        </td>
+                        <td>{{ item.final_price }} руб.</td>
+                        <td>
+                            <a href="{% url 'delete_from_cart' product_slug=item.product.slug %}">
+                                <button class="btn btn-danger"><i class="bi bi-x-octagon"></i> Удалить</button>
+                            </a>
+                        </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2"></td>
+                    <td>Итого:</td>
+                    <td>{{ cart.total_products }}</td>
+                    <td><strong>{{ cart.final_price }} руб.</strong></td>
+                    <td><a href="{% url 'checkout' %}"><button class="btn btn-primary">Заказать</button></a></td>
+        </tr>
+        </tfoot>
+        </table>
+    {% endif %}
+{% endblock content%}
